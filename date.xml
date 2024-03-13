@@ -1,0 +1,13 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+
+<resources>
+    <connectionString>Data Source = .; Initial Catalog = ferma_bd; Integrated Security = SSPI</connectionString>
+    
+<!--    <parentTable>Fertilizanti</parentTable>-->
+<!--    <childTable>Plante</childTable>-->
+<!--    <childFK>Id_Fertilizant</childFK>-->
+    
+    <parentTable>Echipe</parentTable>
+    <childTable>Angajati</childTable>
+    <childFK>Id_Echipa</childFK>
+</resources>
