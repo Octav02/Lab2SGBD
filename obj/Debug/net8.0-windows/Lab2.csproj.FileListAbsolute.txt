@@ -23,3 +23,4 @@ D:\C#Projects\Lab2\bin\Debug\net8.0-windows\runtimes\unix\lib\netcoreapp2.1\Syst
 D:\C#Projects\Lab2\bin\Debug\net8.0-windows\runtimes\win\lib\netcoreapp2.1\System.Data.SqlClient.dll
 D:\C#Projects\Lab2\obj\Debug\net8.0-windows\Lab2.csproj.AssemblyReference.cache
 D:\C#Projects\Lab2\obj\Debug\net8.0-windows\Lab2.csproj.Up2Date
+D:\C#Projects\Lab2\obj\Debug\net8.0-windows\Lab2.sourcelink.json

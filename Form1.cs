@@ -12,6 +12,8 @@ namespace Lab2
         SqlDataAdapter _parentDataAdapter;
         SqlDataAdapter _childDataAdapter;
         DataSet _dataSet;
+        BindingSource _childBindingSource;
+        BindingSource _parentBindingSource;
         private string? _parentTable;
         private string? _childTable;
         private string? _childFk;
@@ -42,32 +44,48 @@ namespace Lab2
         private void Form1_Load(object sender, EventArgs e)
         {
             loadDataFromXML();
-            
+
             label1.Text = _parentTable;
             label2.Text = _childTable;
-            
-            _connection = new SqlConnection(_connectionString);
-            _connection.Open();
-            _dataSet = new DataSet();
 
             string sqlQuery = "SELECT * FROM ";
-            
-            _parentDataAdapter = new SqlDataAdapter(sqlQuery + _parentTable, _connection);
-            _childDataAdapter = new SqlDataAdapter(sqlQuery + _childTable, _connection);
-            
-            _parentDataAdapter.Fill(_dataSet, _parentTable ?? string.Empty);
-            _childDataAdapter.Fill(_dataSet, _childTable ?? string.Empty);
-            
-            DataRelation dataRelation = new DataRelation("FK_" + _parentTable + "_" + _childTable, 
-                _dataSet.Tables[_parentTable].Columns["id"],
-                _dataSet.Tables[_childTable].Columns[_childFk]);
-            _dataSet.Relations.Add(dataRelation);
-            
-            parentGridView.DataSource = _dataSet.Tables[_parentTable];
-            childGridView.DataSource = parentGridView.DataSource;
-            childGridView.DataMember = "FK_" + _parentTable + "_" + _childTable;
-            
-        }
+
+            try
+            {
+                using (_connection = new SqlConnection(_connectionString))
+                {
+                    _connection.Open();
+                    MessageBox.Show("Connection Open ! ");
+                    _dataSet = new DataSet();
+
+                    _parentDataAdapter = new SqlDataAdapter(sqlQuery + _parentTable, _connection);
+                    _childDataAdapter = new SqlDataAdapter(sqlQuery + _childTable, _connection);
+
+                    _parentDataAdapter.Fill(_dataSet, _parentTable ?? string.Empty);
+                    _childDataAdapter.Fill(_dataSet, _childTable ?? string.Empty);
+
+                    DataRelation dataRelation = new DataRelation("FK_" + _parentTable + "_" + _childTable,
+                        _dataSet.Tables[_parentTable].Columns["id"],
+                        _dataSet.Tables[_childTable].Columns[_childFk]);
+                    _dataSet.Relations.Add(dataRelation);
+
+                    _parentBindingSource = new BindingSource();
+                    _childBindingSource = new BindingSource();
+                    
+                    _parentBindingSource.DataSource = _dataSet.Tables[_parentTable];
+                    _childBindingSource.DataSource = _parentBindingSource;
+                    _childBindingSource.DataMember = "FK_" + _parentTable + "_" + _childTable;
+
+                    parentGridView.DataSource = _parentBindingSource;
+                    childGridView.DataSource = _childBindingSource;
+                }
+            }
+            catch (Exception ex)
+            {
+                // Handle or log the exception
+                Console.WriteLine(ex.Message);
+            }
+        }  
 
         private void dataGridView2_CellContentClick(object sender, DataGridViewCellEventArgs e)
         {
